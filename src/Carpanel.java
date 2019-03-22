@@ -1,9 +1,22 @@
+
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author laptop ko
@@ -15,6 +28,7 @@ public class Carpanel extends javax.swing.JPanel {
      */
     public Carpanel() {
         initComponents();
+        refreshcartable();
     }
 
     /**
@@ -41,21 +55,20 @@ public class Carpanel extends javax.swing.JPanel {
         jLabel42 = new javax.swing.JLabel();
         vcolortext = new javax.swing.JTextField();
         vcolorcombo = new javax.swing.JComboBox<>();
-        jLabel43 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        carsave = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        jLabel3 = new javax.swing.JLabel();
         jLabel25 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        update = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        cartable = new javax.swing.JTable();
 
-        addvehicle.setMinimumSize(new java.awt.Dimension(693, 410));
+        addvehicle.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addvehicle.setMinimumSize(new java.awt.Dimension(693, 470));
         addvehicle.setModal(true);
 
         jLabel35.setBackground(new java.awt.Color(153, 153, 153));
@@ -101,6 +114,7 @@ public class Carpanel extends javax.swing.JPanel {
         jLabel42.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel42.setText("Year Model");
 
+        vcolortext.setEditable(false);
         vcolortext.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         vcolortext.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         vcolortext.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -108,12 +122,27 @@ public class Carpanel extends javax.swing.JPanel {
                 vcolortextMouseClicked(evt);
             }
         });
+        vcolortext.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                vcolortextKeyReleased(evt);
+            }
+        });
 
         vcolorcombo.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        vcolorcombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select here", "Red", "Green", "Blue", "Brown", "White", "Black" }));
+        vcolorcombo.setMaximumRowCount(1000);
+        vcolorcombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                vcolorcomboItemStateChanged(evt);
+            }
+        });
         vcolorcombo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 vcolorcomboMouseClicked(evt);
+            }
+        });
+        vcolorcombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vcolorcomboActionPerformed(evt);
             }
         });
 
@@ -180,25 +209,19 @@ public class Carpanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel42)
                     .addComponent(vyearmodel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel35, jLabel37, jLabel38, jLabel40, jLabel41, jLabel42, vbrand, vcolorcombo, vcolortext, vmodel, vplateno, vtype, vyearmodel});
 
-        jLabel43.setBackground(new java.awt.Color(153, 153, 153));
-        jLabel43.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jLabel43.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel43.setText("Image");
-
-        jButton2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jButton2.setText("Save");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        carsave.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        carsave.setForeground(new java.awt.Color(0, 204, 0));
+        carsave.setText("Save");
+        carsave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                carsaveActionPerformed(evt);
             }
         });
-
-        jLabel3.setIconTextGap(0);
 
         jLabel25.setBackground(new java.awt.Color(153, 153, 153));
         jLabel25.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -211,45 +234,32 @@ public class Carpanel extends javax.swing.JPanel {
         addvehicleLayout.setHorizontalGroup(
             addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addvehicleLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(addvehicleLayout.createSequentialGroup()
-                        .addGroup(addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(addvehicleLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jSeparator2)
-                            .addGroup(addvehicleLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addvehicleLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(254, 254, 254))))
-            .addGroup(addvehicleLayout.createSequentialGroup()
-                .addGap(197, 197, 197)
-                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(addvehicleLayout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(carsave, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         addvehicleLayout.setVerticalGroup(
             addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addvehicleLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(37, 37, 37)
                 .addComponent(jLabel25)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(addvehicleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(addvehicleLayout.createSequentialGroup()
-                        .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap())
+                .addComponent(carsave)
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         jTextField1.setBackground(new java.awt.Color(204, 204, 204));
@@ -260,17 +270,27 @@ public class Carpanel extends javax.swing.JPanel {
         jLabel2.setText("Search");
 
         jButton4.setText("ADD VEHICLE");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("UPDATE");
+        update.setText("UPDATE");
+        update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("DELETE");
+        delete.setText("DELETE");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Vehicle's table");
 
-        jTable4.setBackground(new java.awt.Color(204, 204, 255));
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        cartable.setBackground(new java.awt.Color(204, 204, 255));
+        cartable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -293,17 +313,17 @@ public class Carpanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable4.setToolTipText("click the row to edit or delete");
-        jTable4.setGridColor(new java.awt.Color(153, 255, 153));
-        jTable4.setIntercellSpacing(new java.awt.Dimension(1, 2));
-        jTable4.setSelectionBackground(new java.awt.Color(0, 84, 215));
-        jTable4.setSelectionForeground(new java.awt.Color(204, 204, 0));
-        jTable4.addMouseListener(new java.awt.event.MouseAdapter() {
+        cartable.setToolTipText("click the row to edit or delete");
+        cartable.setGridColor(new java.awt.Color(153, 255, 153));
+        cartable.setIntercellSpacing(new java.awt.Dimension(1, 2));
+        cartable.setSelectionBackground(new java.awt.Color(0, 84, 215));
+        cartable.setSelectionForeground(new java.awt.Color(204, 204, 0));
+        cartable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable4MouseClicked(evt);
+                cartableMouseClicked(evt);
             }
         });
-        jScrollPane7.setViewportView(jTable4);
+        jScrollPane7.setViewportView(cartable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -316,8 +336,8 @@ public class Carpanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -328,7 +348,7 @@ public class Carpanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jLabel2});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {delete, jButton4, jLabel2, update});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,20 +365,21 @@ public class Carpanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
+                        .addComponent(update)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
+                        .addComponent(delete)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton4, jButton5, jButton6});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {delete, jButton4, update});
 
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTable4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable4MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTable4MouseClicked
+    private void cartableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cartableMouseClicked
+        update.setEnabled(true);
+        delete.setEnabled(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_cartableMouseClicked
 
     private void vcolorcomboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vcolorcomboMouseClicked
         if (vcolorcombo.getSelectedIndex() == 0) {
@@ -371,7 +392,6 @@ public class Carpanel extends javax.swing.JPanel {
     }//GEN-LAST:event_vcolorcomboMouseClicked
 
     private void vcolortextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_vcolortextMouseClicked
-        vcolorcombo.setSelectedIndex(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_vcolortextMouseClicked
 
@@ -379,33 +399,158 @@ public class Carpanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_vmodelActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void carsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carsaveActionPerformed
+        if (vtype.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Please select vehicle type", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (vcolorcombo.getSelectedIndex() == 0 || vcolorcombo.getSelectedIndex() == vcolorcombo.getItemCount() - 1 && vcolortext.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please select or type the color of the vehicle", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (vplateno.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up the plate number", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (vbrand.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up the brand", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (vmodel.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up the model", "Message", JOptionPane.WARNING_MESSAGE);
+//        } else if (vyearmodel.getYear() == 2000) {
+//            int x = JOptionPane.showConfirmDialog(null, "2000 is the year model?", "Message", JOptionPane.YES_NO_OPTION, 3);
+//            if (x == JOptionPane.NO_OPTION) {
+//                JOptionPane.showMessageDialog(null, "Please fill up or select the year model", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (vcolortext.getForeground() == Color.RED) {
+            JOptionPane.showMessageDialog(null, "The color you typed is in the combo box. Please find it and click it", "Message", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(new connect().database_url);
+                PreparedStatement pstmt = con.prepareStatement("INSERT INTO vehicle VALUES (null,?,?,?,?,?,?);");
+                pstmt.setString(1, vtype.getSelectedItem().toString());
+                if (vcolortext.getText().isEmpty()) {
+                    pstmt.setString(2, vcolorcombo.getSelectedItem().toString());
+                } else {
+                    pstmt.setString(2, vcolortext.getText());
+                }
+                pstmt.setString(3, vplateno.getText());
+                pstmt.setString(4, vbrand.getText());
+                pstmt.setString(5, vmodel.getText());
+                pstmt.setString(6, vyearmodel.getYear() + "");
+                pstmt.execute();
+
+                JOptionPane.showMessageDialog(null, "Successfully save");
+
+                PreparedStatement pstmt1 = con.prepareStatement("INSERT INTO vehiclecolor values (null,?);");
+                pstmt1.setString(1, vcolortext.getText());
+                pstmt1.execute();
+
+                vtype.setSelectedIndex(0);
+                vcolorcombo.setSelectedIndex(0);
+                vcolortext.setText("");
+                vplateno.setText("");
+                vbrand.setText("");
+                vmodel.setText("");
+                vyearmodel.setYear(2000);
+                vcolorcombo.removeAllItems();
+                coloradd();
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Carpanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // }
+        }
+    }//GEN-LAST:event_carsaveActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        coloradd();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void vcolorcomboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vcolorcomboActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_vcolorcomboActionPerformed
+
+    private void vcolorcomboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_vcolorcomboItemStateChanged
+        if (vcolorcombo.getSelectedIndex() + 1 == vcolorcombo.getItemCount() || vcolorcombo.getSelectedIndex() == 0) {
+            vcolortext.setVisible(true);
+            vcolortext.setEditable(true);
+        } else {
+            vcolortext.setVisible(false);
+            vcolortext.setText("");
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_vcolorcomboItemStateChanged
+
+    private void vcolortextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_vcolortextKeyReleased
+        vcolorcombo.setSelectedIndex(vcolorcombo.getItemCount() - 1);
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM vehiclecolor WHERE colorname = '" + vcolortext.getText() + "';");
+            if (rs.next()) {
+                vcolortext.setForeground(Color.red);
+            } else {
+                vcolortext.setForeground(Color.BLACK);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Carpanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_vcolortextKeyReleased
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if (cartable.getSelectedRowCount() > 1) {
+            JOptionPane.showMessageDialog(null, "Please select only one(1)", "Message", 0);
+        } else {
+            int row = cartable.getSelectedRow();
+            TableModel model = cartable.getModel();
+            String l = model.getValueAt(row, 0).toString();
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(new connect().database_url);
+                Statement smt = con.createStatement();
+                ResultSet rs = smt.executeQuery("SELECT * FROM vehicle WHERE v_id = '" + l + "';");
+
+                if (rs.first()) {
+                   vtype.setSelectedItem(rs.getString("v_type"));
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
+                    carsave.setText("UPDATE");
+                    addvehicle.setLocationRelativeTo(null);
+                    addvehicle.setVisible(true);
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_updateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog addvehicle;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton carsave;
+    private javax.swing.JTable cartable;
+    private javax.swing.JButton delete;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable4;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton update;
     private javax.swing.JTextField vbrand;
     private javax.swing.JComboBox<String> vcolorcombo;
     private javax.swing.JTextField vcolortext;
@@ -414,4 +559,50 @@ public class Carpanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> vtype;
     private com.toedter.calendar.JYearChooser vyearmodel;
     // End of variables declaration//GEN-END:variables
+private void coloradd() {
+        vcolorcombo.addItem("Select here");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM vehiclecolor ORDER BY colorname;");
+            while (rs.next()) {
+                String color = rs.getString("colorname");
+                vcolorcombo.addItem(color);
+            }
+            vcolorcombo.addItem("add color");
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Carpanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        addvehicle.setLocationRelativeTo(null);
+        addvehicle.setVisible(true);
+        vcolortext.setEditable(false);// TODO add your handling code here:
+    }
+
+    private void refreshcartable() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM vehicle;");
+            DefaultTableModel studentsModel = new connect().ct;
+            int row = 0;
+            while (rs.next()) {
+                studentsModel.addRow(new Object[]{});
+                studentsModel.setValueAt(rs.getString("brand") + " " + rs.getString("model") + " (" + rs.getString("yearmodel") + ")", row, 0);
+                studentsModel.setValueAt(rs.getString("plate_no"), row, 1);
+                studentsModel.setValueAt(rs.getString("v_type"), row, 2);
+                studentsModel.setValueAt(rs.getString("color"), row, 3);
+                row++;
+            }
+            cartable.setModel(studentsModel);
+
+            update.setEnabled(false);
+            delete.setEnabled(false);
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Carpanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 }

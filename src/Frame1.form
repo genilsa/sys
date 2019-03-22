@@ -1623,7 +1623,7 @@
                                       <Component id="btrip" linkSize="1" alignment="1" min="-2" pref="130" max="-2" attributes="0"/>
                                       <Component id="bdriver" linkSize="1" alignment="1" min="-2" pref="130" max="-2" attributes="0"/>
                                       <Component id="bvehicle" linkSize="1" alignment="1" min="-2" pref="130" max="-2" attributes="0"/>
-                                      <Component id="bbalik3" linkSize="1" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                      <Component id="logout" linkSize="1" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
@@ -1639,7 +1639,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="bvehicle" linkSize="2" min="-2" pref="34" max="-2" attributes="0"/>
                                   <EmptySpace pref="175" max="32767" attributes="0"/>
-                                  <Component id="bbalik3" min="-2" pref="22" max="-2" attributes="0"/>
+                                  <Component id="logout" min="-2" pref="22" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -1675,8 +1675,11 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Vehicles"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bvehicleActionPerformed"/>
+                          </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="bbalik3">
+                        <Component class="javax.swing.JButton" name="logout">
                           <Properties>
                             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                               <Color blue="0" green="0" red="99" type="rgb"/>
@@ -1690,7 +1693,7 @@
                             <Property name="text" type="java.lang.String" value="Log out"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bbalik3ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logoutActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>
@@ -1768,7 +1771,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                           <SubComponents>
-                            <Component class="javax.swing.JTable" name="jTable1">
+                            <Component class="javax.swing.JTable" name="drivertable">
                               <Properties>
                                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                                   <Table columnCount="5" rowCount="0">

@@ -1,9 +1,22 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author laptop ko
@@ -15,6 +28,8 @@ public class Driverpanel extends javax.swing.JPanel {
      */
     public Driverpanel() {
         initComponents();
+        refeshdrivertable();
+
     }
 
     /**
@@ -36,28 +51,34 @@ public class Driverpanel extends javax.swing.JPanel {
         jLabel29 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         jLabel34 = new javax.swing.JLabel();
-        dmname = new javax.swing.JTextField();
-        dcpno = new javax.swing.JTextField();
-        dcpno3 = new javax.swing.JTextField();
-        dlisno = new javax.swing.JTextField();
-        dcpno2 = new javax.swing.JTextField();
+        fname = new javax.swing.JTextField();
+        mname = new javax.swing.JTextField();
+        lname = new javax.swing.JTextField();
+        address = new javax.swing.JTextField();
+        licenseno = new javax.swing.JTextField();
         female = new javax.swing.JRadioButton();
         male = new javax.swing.JRadioButton();
-        dbday = new com.toedter.calendar.JDateChooser();
-        dcpno4 = new javax.swing.JTextField();
+        bday = new com.toedter.calendar.JDateChooser();
+        cpno = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
         drversave = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        gender = new javax.swing.ButtonGroup();
+        driver = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        search = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        update = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable4 = new javax.swing.JTable();
+        drivertable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
-        adddriver.setMinimumSize(new java.awt.Dimension(452, 450));
+        adddriver.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        adddriver.setTitle("ADD DRIVER");
+        adddriver.setMaximumSize(new java.awt.Dimension(450, 537));
+        adddriver.setMinimumSize(new java.awt.Dimension(450, 537));
+        adddriver.setModal(true);
 
         jLabel9.setBackground(new java.awt.Color(153, 153, 153));
         jLabel9.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -91,26 +112,27 @@ public class Driverpanel extends javax.swing.JPanel {
         jLabel34.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel34.setText("Contact number");
 
-        dmname.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dmname.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        fname.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        fname.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        dcpno.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dcpno.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        mname.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        mname.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        dcpno3.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dcpno3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        lname.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lname.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        dlisno.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dlisno.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        address.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        address.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        dcpno2.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dcpno2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        dcpno2.addActionListener(new java.awt.event.ActionListener() {
+        licenseno.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        licenseno.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        licenseno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dcpno2ActionPerformed(evt);
+                licensenoActionPerformed(evt);
             }
         });
 
+        gender.add(female);
         female.setText("Female");
         female.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +140,7 @@ public class Driverpanel extends javax.swing.JPanel {
             }
         });
 
+        gender.add(male);
         male.setText("Male");
         male.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,10 +148,10 @@ public class Driverpanel extends javax.swing.JPanel {
             }
         });
 
-        dbday.setDateFormatString("yyyy/MM/dd");
+        bday.setDateFormatString("yyyy/MM/dd");
 
-        dcpno4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        dcpno4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        cpno.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        cpno.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         jLabel25.setBackground(new java.awt.Color(153, 153, 153));
         jLabel25.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
@@ -156,54 +179,50 @@ public class Driverpanel extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dmname))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dcpno))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dcpno3))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dlisno))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dcpno2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(female, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(male, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dbday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dcpno4))
-                            .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fname))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1)))
+                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(mname))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lname))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(address))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(licenseno))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(female, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(male, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bday, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cpno))
+                    .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(109, 109, 109)
                 .addComponent(drversave, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel26, jLabel27, jLabel29, jLabel30, jLabel32, jLabel33, jLabel34, jLabel9});
@@ -216,15 +235,15 @@ public class Driverpanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(dmname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
-                    .addComponent(dcpno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(mname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dcpno3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel30)
@@ -233,19 +252,19 @@ public class Driverpanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel32)
-                    .addComponent(dlisno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(address, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel29)
-                    .addComponent(dbday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel33)
-                    .addComponent(dcpno2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(licenseno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel34)
-                    .addComponent(dcpno4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cpno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -253,40 +272,60 @@ public class Driverpanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {dbday, dcpno, dlisno, dmname, female, jLabel26, jLabel27, jLabel29, jLabel30, jLabel32, jLabel33, jLabel34, jLabel9, male});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {address, bday, female, fname, jLabel26, jLabel27, jLabel29, jLabel30, jLabel32, jLabel33, jLabel34, jLabel9, male, mname});
 
         javax.swing.GroupLayout adddriverLayout = new javax.swing.GroupLayout(adddriver.getContentPane());
         adddriver.getContentPane().setLayout(adddriverLayout);
         adddriverLayout.setHorizontalGroup(
             adddriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(adddriverLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         adddriverLayout.setVerticalGroup(
             adddriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(adddriverLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(21, 21, 21))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(109, Short.MAX_VALUE))
         );
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Search");
 
-        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField1.setToolTipText("type to search");
-        jTextField1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        search.setBackground(new java.awt.Color(204, 204, 204));
+        search.setToolTipText("type to search");
+        search.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        search.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchKeyReleased(evt);
+            }
+        });
 
         jButton4.setText("ADD DRIVER");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("UPDATE");
+        update.setText("UPDATE");
+        update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("DELETE");
+        delete.setText("DELETE");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
 
-        jTable4.setBackground(new java.awt.Color(204, 204, 255));
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+        drivertable.setBackground(new java.awt.Color(204, 204, 255));
+        drivertable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -309,109 +348,297 @@ public class Driverpanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jTable4.setToolTipText("click the row to edit or delete");
-        jTable4.setGridColor(new java.awt.Color(153, 255, 153));
-        jTable4.setIntercellSpacing(new java.awt.Dimension(1, 2));
-        jTable4.setSelectionBackground(new java.awt.Color(0, 84, 215));
-        jTable4.setSelectionForeground(new java.awt.Color(204, 204, 0));
-        jTable4.addMouseListener(new java.awt.event.MouseAdapter() {
+        drivertable.setToolTipText("click the row to edit or delete");
+        drivertable.setGridColor(new java.awt.Color(153, 255, 153));
+        drivertable.setIntercellSpacing(new java.awt.Dimension(1, 2));
+        drivertable.setSelectionBackground(new java.awt.Color(0, 84, 215));
+        drivertable.setSelectionForeground(new java.awt.Color(204, 204, 0));
+        drivertable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable4MouseClicked(evt);
+                drivertableMouseClicked(evt);
             }
         });
-        jScrollPane7.setViewportView(jTable4);
-        if (jTable4.getColumnModel().getColumnCount() > 0) {
-            jTable4.getColumnModel().getColumn(0).setResizable(false);
+        jScrollPane7.setViewportView(drivertable);
+        if (drivertable.getColumnModel().getColumnCount() > 0) {
+            drivertable.getColumnModel().getColumn(0).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Driver's table");
 
+        javax.swing.GroupLayout driverLayout = new javax.swing.GroupLayout(driver);
+        driver.setLayout(driverLayout);
+        driverLayout.setHorizontalGroup(
+            driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(driverLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(driverLayout.createSequentialGroup()
+                        .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                            .addComponent(search))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        driverLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {delete, jButton4, update});
+
+        driverLayout.setVerticalGroup(
+            driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(driverLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(driverLayout.createSequentialGroup()
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(update)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(delete)
+                        .addGap(0, 205, Short.MAX_VALUE))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        driverLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {delete, jButton4, jLabel2, search, update});
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jLabel2, jTextField1});
-
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTable4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable4MouseClicked
+    private void drivertableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drivertableMouseClicked
+        update.setEnabled(true);
+        delete.setEnabled(true);
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable4MouseClicked
+    }//GEN-LAST:event_drivertableMouseClicked
 
     private void maleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleActionPerformed
-           // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_maleActionPerformed
 
     private void femaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_femaleActionPerformed
-   // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_femaleActionPerformed
 
-    private void dcpno2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dcpno2ActionPerformed
+    private void licensenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_licensenoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_dcpno2ActionPerformed
+    }//GEN-LAST:event_licensenoActionPerformed
 
     private void drversaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drversaveActionPerformed
-// TODO add your handling code here:
+        if (fname.getText().isEmpty() || mname.getText().isEmpty() || lname.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please complete the name", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (gender.isSelected(null)) {
+            JOptionPane.showMessageDialog(null, "Please select gender", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (address.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up the address", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (bday.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Please fill up the birthday", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (licenseno.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up license number", "Message", JOptionPane.WARNING_MESSAGE);
+        } else if (cpno.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please fill up phone number", "Message", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(new connect().database_url);
+
+                if ("SAVE".equals(drversave.getText())) {
+                    PreparedStatement pstmt = con.prepareStatement("INSERT INTO driver VALUES (null,?,?,?,?,?,?,?,?);");
+                    pstmt.setString(1, fname.getText());
+                    pstmt.setString(2, mname.getText());
+                    pstmt.setString(3, lname.getText());
+                    if (female.isSelected()) {
+                        pstmt.setString(4, "f");
+                    } else if (male.isSelected()) {
+                        pstmt.setString(4, "m");
+                    }
+                    pstmt.setString(5, address.getText());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    pstmt.setString(6, sdf.format(bday.getDate()));
+                    pstmt.setString(7, licenseno.getText());
+                    pstmt.setString(8, cpno.getText());
+                    pstmt.execute();
+                    JOptionPane.showMessageDialog(null, "Successfully saved", "Message", -1);
+
+                } else {
+                    int row = drivertable.getSelectedRow();
+                    TableModel model = drivertable.getModel();
+                    String l = model.getValueAt(row, 0).toString();
+                    PreparedStatement pstmt = con.prepareStatement("UPDATE driver "
+                            + "set fname = ?,mname =?,lname=?,gender=?,"
+                            + "address=?,bday=?,license_no=?,cellnumber=? WHERE d_id ='" + l + "';");
+
+                    pstmt.setString(1, fname.getText());
+                    pstmt.setString(2, mname.getText());
+                    pstmt.setString(3, lname.getText());
+                    if (female.isSelected()) {
+                        pstmt.setString(4, "f");
+                    } else if (male.isSelected()) {
+                        pstmt.setString(4, "m");
+                    }
+                    pstmt.setString(5, address.getText());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                    pstmt.setString(6, sdf.format(bday.getDate()));
+                    pstmt.setString(7, licenseno.getText());
+                    pstmt.setString(8, cpno.getText());
+                    pstmt.execute();
+                    JOptionPane.showMessageDialog(null, "Successfully updated", "Message", -1);
+                    this.adddriver.dispose();
+                }
+
+                fname.setText("");
+                mname.setText("");
+                lname.setText("");
+                gender.clearSelection();
+                address.setText("");
+                bday.setDate(null);
+                licenseno.setText("");
+                cpno.setText("");
+                drversave.setText("SAVE");
+                refeshdrivertable();
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_drversaveActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        adddriver.setLocationRelativeTo(null);
+        adddriver.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
+        if (drivertable.getSelectedRowCount() > 1) {
+            JOptionPane.showMessageDialog(null, "Please select only one(1)", "Message", 0);
+        } else {
+            int row = drivertable.getSelectedRow();
+            TableModel model = drivertable.getModel();
+            String l = model.getValueAt(row, 0).toString();
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(new connect().database_url);
+                Statement smt = con.createStatement();
+                ResultSet rs = smt.executeQuery("SELECT * FROM driver WHERE d_id = '" + l + "';");
+
+                if (rs.first()) {
+                    fname.setText(rs.getString("fname"));
+                    mname.setText(rs.getString("mname"));
+                    lname.setText(rs.getString("lname"));
+                    String g = rs.getString("gender");
+                    if ("m".equals(g)) {
+                        male.setSelected(true);
+                    } else {
+                        female.setSelected(true);
+                    }
+                    address.setText(rs.getString("address"));
+                    bday.setDate(rs.getDate("bday"));
+                    licenseno.setText(rs.getString("license_no"));
+                    cpno.setText(rs.getString("cellnumber"));
+                    drversave.setText("UPDATE");
+                    adddriver.setLocationRelativeTo(null);
+                    adddriver.setVisible(true);
+                }
+            } catch (ClassNotFoundException | SQLException ex) {
+                Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_updateActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        int rowcount = drivertable.getSelectedRowCount();
+        int[] rows = drivertable.getSelectedRows();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement smt = con.createStatement();
+            int x = JOptionPane.showConfirmDialog(null, "Delete the selected " + rowcount + " row(s)?", "Warning", JOptionPane.YES_NO_OPTION, 2);
+            if (x == JOptionPane.YES_OPTION) {
+                while (rowcount > 0) {
+                    TableModel model = drivertable.getModel();
+                    String l = model.getValueAt(rows[rowcount - 1], 0).toString();
+                    String sql = "DELETE FROM driver WHERE d_id = '" + l + "';";
+                    smt.execute(sql);
+                    rowcount--;
+                }
+            }
+            refeshdrivertable();
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyReleased
+        String pangita = search.getText();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement stmt = con.createStatement();
+            String sql = "SELECT * FROM driver WHERE 1=1 ";
+            if (pangita != (null)) {
+                sql = sql + "and (fname LIKE '%" + pangita + "%'"
+                        + " or lname LIKE '%" + pangita + "%')";
+            }
+            ResultSet rs = stmt.executeQuery(sql);
+            DefaultTableModel studentsModel = new connect().dt;
+            int row = 0;
+            while (rs.next()) {
+                studentsModel.addRow(new Object[]{});
+                studentsModel.setValueAt(rs.getString("d_id"), row, 0);
+                String n1 = rs.getString("fname");
+                String n = rs.getString("mname");
+                char n2 = n.charAt(0);
+                String n3 = rs.getString("lname");
+                studentsModel.setValueAt(n1 + " " + n2 + "." + " " + n3, row, 1);
+                studentsModel.setValueAt(rs.getString("license_no"), row, 2);
+                studentsModel.setValueAt(rs.getString("cellnumber"), row, 3);
+                row++;
+            }
+            drivertable.setModel(studentsModel);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_searchKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog adddriver;
-    private com.toedter.calendar.JDateChooser dbday;
-    private javax.swing.JTextField dcpno;
-    private javax.swing.JTextField dcpno2;
-    private javax.swing.JTextField dcpno3;
-    private javax.swing.JTextField dcpno4;
-    private javax.swing.JTextField dlisno;
-    private javax.swing.JTextField dmname;
+    private javax.swing.JTextField address;
+    private com.toedter.calendar.JDateChooser bday;
+    private javax.swing.JTextField cpno;
+    private javax.swing.JButton delete;
+    private javax.swing.JPanel driver;
+    private javax.swing.JTable drivertable;
     private javax.swing.JButton drversave;
     private javax.swing.JRadioButton female;
+    private javax.swing.JTextField fname;
+    private javax.swing.ButtonGroup gender;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel25;
@@ -426,8 +653,44 @@ public class Driverpanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField licenseno;
+    private javax.swing.JTextField lname;
     private javax.swing.JRadioButton male;
+    private javax.swing.JTextField mname;
+    private javax.swing.JTextField search;
+    private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
+
+    private void refeshdrivertable() {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(new connect().database_url);
+            Statement smt = con.createStatement();
+
+            ResultSet rs = smt.executeQuery("SELECT * FROM driver");
+            DefaultTableModel studentsModel = new connect().dt;
+            int row = 0;
+            while (rs.next()) {
+                studentsModel.addRow(new Object[]{});
+                studentsModel.setValueAt(rs.getString("d_id"), row, 0);
+                String n1 = rs.getString("fname");
+                String n = rs.getString("mname");
+                char n2 = n.charAt(0);
+                String n3 = rs.getString("lname");
+                studentsModel.setValueAt(n1 + " " + n2 + "." + " " + n3, row, 1);
+                studentsModel.setValueAt(rs.getString("license_no"), row, 2);
+                studentsModel.setValueAt(rs.getString("cellnumber"), row, 3);
+
+                row++;
+            }
+            drivertable.setModel(studentsModel);
+
+            update.setEnabled(false);
+            delete.setEnabled(false);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Frame1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

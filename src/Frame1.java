@@ -1,5 +1,12 @@
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -12,12 +19,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author laptop ko
  */
-public class Frame1 extends javax.swing.JFrame {
+public class Frame1 extends javax.swing.JFrame{
 
     /**
      * Creates new form frame1
      */
-    public Frame1() {
+    public Frame1(){
         initComponents();
         
         
@@ -120,10 +127,10 @@ bvehicle.setBackground(Color.DARK_GRAY);
         btrip = new javax.swing.JButton();
         bdriver = new javax.swing.JButton();
         bvehicle = new javax.swing.JButton();
-        bbalik3 = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
         trippanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        drivertable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -1035,14 +1042,19 @@ bvehicle.setBackground(Color.DARK_GRAY);
 
         bvehicle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         bvehicle.setText("Vehicles");
-
-        bbalik3.setBackground(new java.awt.Color(153, 0, 0));
-        bbalik3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        bbalik3.setForeground(new java.awt.Color(255, 255, 255));
-        bbalik3.setText("Log out");
-        bbalik3.addActionListener(new java.awt.event.ActionListener() {
+        bvehicle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bbalik3ActionPerformed(evt);
+                bvehicleActionPerformed(evt);
+            }
+        });
+
+        logout.setBackground(new java.awt.Color(153, 0, 0));
+        logout.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        logout.setForeground(new java.awt.Color(255, 255, 255));
+        logout.setText("Log out");
+        logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutActionPerformed(evt);
             }
         });
 
@@ -1056,11 +1068,11 @@ bvehicle.setBackground(Color.DARK_GRAY);
                     .addComponent(btrip, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bdriver, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bvehicle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bbalik3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bbalik3, bdriver, btrip, bvehicle});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {bdriver, btrip, bvehicle, logout});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1072,7 +1084,7 @@ bvehicle.setBackground(Color.DARK_GRAY);
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(bvehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
-                .addComponent(bbalik3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1080,7 +1092,7 @@ bvehicle.setBackground(Color.DARK_GRAY);
 
         splitcar.setLeftComponent(jPanel3);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        drivertable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1103,7 +1115,7 @@ bvehicle.setBackground(Color.DARK_GRAY);
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(drivertable);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1351,9 +1363,9 @@ bvehicle.setBackground(Color.DARK_GRAY);
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bbalik3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbalik3ActionPerformed
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_bbalik3ActionPerformed
+    }//GEN-LAST:event_logoutActionPerformed
 
     private void dfname6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dfname6ActionPerformed
         // TODO add your handling code here:
@@ -1453,9 +1465,12 @@ splitcar.setRightComponent(trippanel);
     }//GEN-LAST:event_btripActionPerformed
 
     private void bdriverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdriverActionPerformed
-btrip.setBackground(Color.GREEN);
-bdriver.setBackground(Color.DARK_GRAY);
-bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code here:
+btrip.setBackground(Color.DARK_GRAY);
+bdriver.setBackground(Color.GREEN);
+bvehicle.setBackground(Color.DARK_GRAY);  
+
+
+splitcar.setRightComponent(new Driverpanel());// TODO add your handling code here:
     }//GEN-LAST:event_bdriverActionPerformed
 
     private void btrip1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btrip1ActionPerformed
@@ -1469,6 +1484,18 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
  
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void bvehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bvehicleActionPerformed
+
+btrip.setBackground(Color.DARK_GRAY);
+bdriver.setBackground(Color.DARK_GRAY);
+bvehicle.setBackground(Color.GREEN);  
+
+
+splitcar.setRightComponent(new Carpanel());
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bvehicleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1510,7 +1537,6 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private javax.swing.JDialog adddoc;
     private javax.swing.JDialog addpas;
     private javax.swing.JDialog addtrip;
-    private javax.swing.JButton bbalik3;
     private javax.swing.JButton bbalik4;
     private javax.swing.JButton bdriver;
     private javax.swing.JButton bdriver1;
@@ -1534,6 +1560,7 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private javax.swing.JTextField dfname7;
     private javax.swing.JTextField dfname8;
     private javax.swing.JTextField dfname9;
+    private javax.swing.JTable drivertable;
     private javax.swing.JButton drversave3;
     private javax.swing.JButton drversave4;
     private javax.swing.JButton drversave5;
@@ -1600,7 +1627,6 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable7;
     private javax.swing.JTable jTable8;
@@ -1608,6 +1634,7 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JButton logout;
     private javax.swing.JDialog printtrip;
     private javax.swing.JSplitPane splitcar;
     private javax.swing.JTable tpass;
@@ -1616,4 +1643,7 @@ bvehicle.setBackground(Color.DARK_GRAY);        // TODO add your handling code h
     private javax.swing.JComboBox<String> type1;
     private javax.swing.JDialog viewpas;
     // End of variables declaration//GEN-END:variables
+
+
+
 }
