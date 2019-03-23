@@ -61,8 +61,8 @@ public class Driverpanel extends javax.swing.JPanel {
         bday = new com.toedter.calendar.JDateChooser();
         cpno = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
-        drversave = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        driversave = new javax.swing.JButton();
         gender = new javax.swing.ButtonGroup();
         driver = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -76,7 +76,6 @@ public class Driverpanel extends javax.swing.JPanel {
 
         adddriver.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         adddriver.setTitle("ADD DRIVER");
-        adddriver.setMaximumSize(new java.awt.Dimension(450, 537));
         adddriver.setMinimumSize(new java.awt.Dimension(450, 537));
         adddriver.setModal(true);
 
@@ -159,18 +158,18 @@ public class Driverpanel extends javax.swing.JPanel {
         jLabel25.setText("FILL UP FORM");
         jLabel25.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        drversave.setBackground(new java.awt.Color(204, 204, 204));
-        drversave.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        drversave.setForeground(new java.awt.Color(0, 180, 0));
-        drversave.setText("SAVE");
-        drversave.setToolTipText("click to record");
-        drversave.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        drversave.setMaximumSize(new java.awt.Dimension(68, 29));
-        drversave.setMinimumSize(new java.awt.Dimension(68, 29));
-        drversave.setPreferredSize(new java.awt.Dimension(68, 29));
-        drversave.addActionListener(new java.awt.event.ActionListener() {
+        driversave.setBackground(new java.awt.Color(204, 204, 204));
+        driversave.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        driversave.setForeground(new java.awt.Color(0, 180, 0));
+        driversave.setText("SAVE");
+        driversave.setToolTipText("click to record");
+        driversave.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        driversave.setMaximumSize(new java.awt.Dimension(68, 29));
+        driversave.setMinimumSize(new java.awt.Dimension(68, 29));
+        driversave.setPreferredSize(new java.awt.Dimension(68, 29));
+        driversave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                drversaveActionPerformed(evt);
+                driversaveActionPerformed(evt);
             }
         });
 
@@ -207,7 +206,7 @@ public class Driverpanel extends javax.swing.JPanel {
                         .addComponent(female, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(male, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 125, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -220,9 +219,9 @@ public class Driverpanel extends javax.swing.JPanel {
                     .addComponent(jSeparator1))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addComponent(drversave, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addGap(97, 97, 97)
+                .addComponent(driversave, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel26, jLabel27, jLabel29, jLabel30, jLabel32, jLabel33, jLabel34, jLabel9});
@@ -267,9 +266,9 @@ public class Driverpanel extends javax.swing.JPanel {
                     .addComponent(cpno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(drversave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(driversave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(115, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {address, bday, female, fname, jLabel26, jLabel27, jLabel29, jLabel30, jLabel32, jLabel33, jLabel34, jLabel9, male, mname});
@@ -287,8 +286,8 @@ public class Driverpanel extends javax.swing.JPanel {
             adddriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(adddriverLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -372,7 +371,7 @@ public class Driverpanel extends javax.swing.JPanel {
         driverLayout.setHorizontalGroup(
             driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(driverLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(driverLayout.createSequentialGroup()
@@ -384,8 +383,7 @@ public class Driverpanel extends javax.swing.JPanel {
                         .addGap(10, 10, 10)
                         .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                            .addComponent(search))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(search)))))
         );
 
         driverLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {delete, jButton4, update});
@@ -406,9 +404,8 @@ public class Driverpanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(update)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(delete)
-                        .addGap(0, 205, Short.MAX_VALUE))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(delete))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -419,14 +416,16 @@ public class Driverpanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(driver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -448,7 +447,7 @@ public class Driverpanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_licensenoActionPerformed
 
-    private void drversaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drversaveActionPerformed
+    private void driversaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driversaveActionPerformed
         if (fname.getText().isEmpty() || mname.getText().isEmpty() || lname.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please complete the name", "Message", JOptionPane.WARNING_MESSAGE);
         } else if (gender.isSelected(null)) {
@@ -467,7 +466,7 @@ public class Driverpanel extends javax.swing.JPanel {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(new connect().database_url);
 
-                if ("SAVE".equals(drversave.getText())) {
+                if ("SAVE".equals(driversave.getText())) {
                     PreparedStatement pstmt = con.prepareStatement("INSERT INTO driver VALUES (null,?,?,?,?,?,?,?,?);");
                     pstmt.setString(1, fname.getText());
                     pstmt.setString(2, mname.getText());
@@ -519,13 +518,13 @@ public class Driverpanel extends javax.swing.JPanel {
                 bday.setDate(null);
                 licenseno.setText("");
                 cpno.setText("");
-                drversave.setText("SAVE");
+                driversave.setText("SAVE");
                 refeshdrivertable();
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_drversaveActionPerformed
+    }//GEN-LAST:event_driversaveActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         adddriver.setLocationRelativeTo(null);
@@ -561,7 +560,7 @@ public class Driverpanel extends javax.swing.JPanel {
                     bday.setDate(rs.getDate("bday"));
                     licenseno.setText(rs.getString("license_no"));
                     cpno.setText(rs.getString("cellnumber"));
-                    drversave.setText("UPDATE");
+                    driversave.setText("UPDATE");
                     adddriver.setLocationRelativeTo(null);
                     adddriver.setVisible(true);
                 }
@@ -633,8 +632,8 @@ public class Driverpanel extends javax.swing.JPanel {
     private javax.swing.JTextField cpno;
     private javax.swing.JButton delete;
     private javax.swing.JPanel driver;
+    private javax.swing.JButton driversave;
     private javax.swing.JTable drivertable;
-    private javax.swing.JButton drversave;
     private javax.swing.JRadioButton female;
     private javax.swing.JTextField fname;
     private javax.swing.ButtonGroup gender;
