@@ -97,7 +97,81 @@ public class connect {
 });
    
  //==================end of car table========================================================================  
+  //===========================start of table================================================ 
+  
+   DefaultTableModel tablepass = (new javax.swing.table.DefaultTableModel(
+    new Object [][] {
+
+    },
+    new String [] {
+        "ID", "Name", "Phone number"
+    }
+) {
+    Class[] types = new Class [] {
+        java.lang.String.class, java.lang.String.class, java.lang.String.class
+    };
+    boolean[] canEdit = new boolean [] {
+        false, false, false
+    };
+
+    public Class getColumnClass(int columnIndex) {
+        return types [columnIndex];
+    }
+
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+    }
+});
+    //==================end of car table========================================================================  
+  //===========================start of table================================================ 
+   DefaultTableModel tabledriver=(new javax.swing.table.DefaultTableModel(
+    new Object [][] {
+
+    },
+    new String [] {
+        "ID", "Name", "Cell Number"
+    }
+) {
+    Class[] types = new Class [] {
+        java.lang.String.class, java.lang.String.class, java.lang.String.class
+    };
+    boolean[] canEdit = new boolean [] {
+        false, false, false
+    };
+
+    public Class getColumnClass(int columnIndex) {
+        return types [columnIndex];
+    }
+
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+    }
+});
    
    
-   
+    //==================end of car table========================================================================  
+  //===========================start of table================================================ 
+   DefaultTableModel tablecar=(new javax.swing.table.DefaultTableModel(
+    new Object [][] {
+
+    },
+    new String [] {
+        "Name", "Color", "Plate Number"
+    }
+) {
+    Class[] types = new Class [] {
+        java.lang.String.class, java.lang.String.class, java.lang.String.class
+    };
+    boolean[] canEdit = new boolean [] {
+        false, false, false
+    };
+
+    public Class getColumnClass(int columnIndex) {
+        return types [columnIndex];
+    }
+
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return canEdit [columnIndex];
+    }
+});
 }

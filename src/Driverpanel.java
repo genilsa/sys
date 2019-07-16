@@ -66,7 +66,7 @@ public class Driverpanel extends javax.swing.JPanel {
         gender = new javax.swing.ButtonGroup();
         driver = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        search = new javax.swing.JTextField();
+        driversearch = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         update = new javax.swing.JButton();
         delete = new javax.swing.JButton();
@@ -293,12 +293,12 @@ public class Driverpanel extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Search");
 
-        search.setBackground(new java.awt.Color(204, 204, 204));
-        search.setToolTipText("type to search");
-        search.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        search.addKeyListener(new java.awt.event.KeyAdapter() {
+        driversearch.setBackground(new java.awt.Color(204, 204, 204));
+        driversearch.setToolTipText("type to search");
+        driversearch.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        driversearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchKeyReleased(evt);
+                driversearchKeyReleased(evt);
             }
         });
 
@@ -383,7 +383,7 @@ public class Driverpanel extends javax.swing.JPanel {
                         .addGap(10, 10, 10)
                         .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
-                            .addComponent(search)))))
+                            .addComponent(driversearch)))))
         );
 
         driverLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {delete, jButton4, update});
@@ -396,7 +396,7 @@ public class Driverpanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(driversearch, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(driverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(driverLayout.createSequentialGroup()
@@ -409,7 +409,7 @@ public class Driverpanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        driverLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {delete, jButton4, jLabel2, search, update});
+        driverLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {delete, driversearch, jButton4, jLabel2, update});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -593,8 +593,8 @@ public class Driverpanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_deleteActionPerformed
 
-    private void searchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchKeyReleased
-        String pangita = search.getText();
+    private void driversearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_driversearchKeyReleased
+        String pangita = driversearch.getText();
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con = DriverManager.getConnection(new connect().database_url);
@@ -623,7 +623,7 @@ public class Driverpanel extends javax.swing.JPanel {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Driverpanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_searchKeyReleased
+    }//GEN-LAST:event_driversearchKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDialog adddriver;
@@ -633,6 +633,7 @@ public class Driverpanel extends javax.swing.JPanel {
     private javax.swing.JButton delete;
     private javax.swing.JPanel driver;
     private javax.swing.JButton driversave;
+    private javax.swing.JTextField driversearch;
     private javax.swing.JTable drivertable;
     private javax.swing.JRadioButton female;
     private javax.swing.JTextField fname;
@@ -656,7 +657,6 @@ public class Driverpanel extends javax.swing.JPanel {
     private javax.swing.JTextField lname;
     private javax.swing.JRadioButton male;
     private javax.swing.JTextField mname;
-    private javax.swing.JTextField search;
     private javax.swing.JButton update;
     // End of variables declaration//GEN-END:variables
 
